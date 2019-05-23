@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    "baseUrl": "./",
+    "paths": {
+      "*": ["typings/*", "node_modules/@types/*"]
+    },
+    "typeRoots": ["typings/*", "node_modules/@types/*"],
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "resolveJsonModule": true
+  }
+}

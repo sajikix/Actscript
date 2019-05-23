@@ -1,0 +1,21 @@
+{
+  "name": "linda-client",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "Ryusei Sajiki <rsajiki@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "watch": "tsc -w",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/bson": "^1.0.10",
+    "@types/socket.io": "^1.4.36",
+    "@types/socket.io-client": "^1.4.32"
+  },
+  "dependencies": {
+    "path": "^0.12.7",
+    "socket.io-client": "^2.2.0"
+  }
+}

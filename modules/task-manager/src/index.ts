@@ -36,15 +36,38 @@ class TaskManager {
     this.lindaClient.watch({ type: 'action' }, resData => {
       // TODO:ここを充実・拡張させる
       if (isValidAction(resData._payload)) {
-        const { actionType, name, id } = resData._payload
+        const { actionType, name, id, details } = resData._payload
 
         switch (actionType) {
           case 'human/wakeup':
-            const task = { type: 'task', name, expect: { wake: 'up' }, id }
+            const task = {
+              type: 'task',
+              name,
+              expect: { wake: 'up', name },
+              id,
+            }
             this.tasks[id] = task
             this.lindaClient.write(task)
             break
+          case 'human/leave':
+            const leaveTask = {
+              type: 'task',
+              name,
+              expect: { name, type: 'leave', place: details.place },
+              id,
+            }
+            this.tasks[id] = leaveTask
+            this.lindaClient.write(leaveTask)
+            break
           case 'human/goto':
+            const gotoTask = {
+              type: 'task',
+              name,
+              expect: { name, place: details.place },
+              id,
+            }
+            this.tasks[id] = gotoTask
+            this.lindaClient.write(gotoTask)
             break
           default:
             break

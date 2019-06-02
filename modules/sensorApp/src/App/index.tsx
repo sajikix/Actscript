@@ -3,15 +3,15 @@ import { TouchableOpacity, StyleSheet, Text, View } from 'react-native'
 import { switchSensor } from '../sensors'
 
 const App = () => {
-  const [sensing, setSensing] = useState(true)
+  const [sensing, setSensing] = useState(false)
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{'Sensor'}</Text>
       <TouchableOpacity
         style={[!sensing ? styles.buttonOn : styles.buttonOff, styles.button]}
         onPress={() => {
+          switchSensor(!sensing)
           setSensing(!sensing)
-          switchSensor(sensing)
         }}
       >
         <Text style={styles.buttonText}>{!sensing ? 'ON' : 'OFF'}</Text>

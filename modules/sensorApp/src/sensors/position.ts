@@ -33,7 +33,7 @@ async function getCurrentPosition(
 export default class Position {
   isOn: boolean
   constructor() {
-    this.isOn = true
+    this.isOn = false
   }
   getAndWrite() {
     setInterval(async () => {

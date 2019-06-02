@@ -7,7 +7,10 @@
 
 const path = require('path')
 
-const watchFolders = [path.resolve(__dirname, '..', 'linda-client')]
+const watchFolders = [
+  path.resolve(__dirname, '..', 'domains'),
+  path.resolve(__dirname, '..', 'linda-client'),
+]
 
 module.exports = {
   transformer: {

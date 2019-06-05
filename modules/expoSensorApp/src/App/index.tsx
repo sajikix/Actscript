@@ -1,7 +1,11 @@
 import React from 'react'
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native'
 // import { switchSensor } from '../sensors'
-import { Permissions, Notifications, Location, TaskManager } from 'expo'
+// import { Notifications } from 'expo'
+import { setLocation } from 'actscript-domains'
+import * as Location from 'expo-location'
+import * as Permissions from 'expo-permissions'
+import * as TaskManager from 'expo-task-manager'
 // import TaskManager from 'expo-task-manager'
 
 interface Props {}
@@ -13,53 +17,47 @@ interface State {
 const GEOLOCATION_LOGGING = 'geolocationLogging'
 
 // タスク定義
-TaskManager.defineTask(GEOLOCATION_LOGGING, ({ data, error }) => {
-  if (error) {
-    console.error(error.message)
-    return
-  }
-  if (data) {
-    console.log(data)
-  }
-  // // ジオフェンス内に入ったイベントであれば、プッシュ通知を表示
-  // if (eventType === Location.GeofencingEventType.Enter) {
-  //   Notifications.presentLocalNotificationAsync({
-  //     title: 'test geofence notification',
-  //     body: 'geofence notification',
-  //     data: {
-  //       message: 'geofence notification message',
-  //     },
-  //   })
-  // }
-})
+TaskManager.defineTask(
+  GEOLOCATION_LOGGING,
+  ({ data, error }: { data: { [key: string]: any }; error: any }) => {
+    if (error) {
+      console.error(error.message)
+      return
+    }
+    if (data.locations[0].coords) {
+      const coords = data.locations[0].coords
+      console.log(coords)
+      setLocation('saji', { lat: coords.latitude, lon: coords.longitude })
+    }
+  },
+)
 
 class App extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = { sensing: false }
     this.buttonPress = this.buttonPress.bind(this)
+    this.onPressStartGeofencing = this.onPressStartGeofencing.bind(this)
   }
 
   async buttonPress() {
     // await switchSensor(!this.state.sensing)
-    this.onPressStartGeofencing()
-    this.setState({ sensing: !this.state.sensing })
+    // setLocation('saji', { lon: 11, lat: 11 })
+    await this.setState({ sensing: !this.state.sensing })
+    await this.onPressStartGeofencing()
   }
 
   onPressStartGeofencing() {
-    // Location.startGeofencingAsync(GEOFENCING_ON_ENTER, [
-    //   {
-    //     latitude: 35.661561,
-    //     longitude: 139.707883,
-    //     radius: 50,
-    //     notifyOnEnter: true,
-    //     notifyOnExit: false,
-    //   },
-    // ])
-    Location.startLocationUpdatesAsync(GEOLOCATION_LOGGING, {
-      accuracy: 4,
-      //distanceInterval: 15,
-    })
+    if (this.state.sensing) {
+      Location.startLocationUpdatesAsync(GEOLOCATION_LOGGING, {
+        accuracy: 4,
+        distanceInterval: 15,
+        timeInterval: 15000,
+        showsBackgroundLocationIndicator: true,
+      })
+    } else {
+      Location.stopLocationUpdatesAsync(GEOLOCATION_LOGGING)
+    }
   }
 
   async componentDidMount() {

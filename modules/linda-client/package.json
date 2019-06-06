@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "path": "^0.12.7",
-    "socket.io-client": "^2.2.0",
-    "axios":
+    "socket.io-client": "^2.2.0"
   }
 }

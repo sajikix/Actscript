@@ -15,7 +15,7 @@ import BackgroundGeolocation, {
   ProviderChangeEvent,
   ConnectivityChangeEvent,
 } from 'react-native-background-geolocation'
-import { setLocation, lindaClient } from 'actscript-domains'
+import { setLocation, setMotion, lindaClient } from 'actscript-domains'
 
 // import TaskManager from 'expo-task-manager'
 
@@ -30,9 +30,8 @@ class App extends React.Component<Props, ReactState> {
     this.state = { sensing: false }
     this.buttonPress = this.buttonPress.bind(this)
     this.onLocation = this.onLocation.bind(this)
+    this.onActivityChange = this.onActivityChange.bind(this)
   }
-
-  componentWillMount() {}
 
   componentWillUnmount() {
     BackgroundGeolocation.removeListeners()
@@ -47,10 +46,14 @@ class App extends React.Component<Props, ReactState> {
   }
   onActivityChange(event: MotionActivityEvent) {
     console.log('[activitychange] -', event) // eg: 'on_foot', 'still', 'in_vehicle'
-    lindaClient.write({ type: 'MotionActivity', data: event.activity })
+    this.state.sensing && setMotion('saji', event.activity)
   }
   onProviderChange(provider: ProviderChangeEvent) {
     console.log('[providerchange] -', provider.enabled, provider.status)
+  }
+
+  onHeartbeat(event: HeartbeatEvent) {
+    console.log('heart beat')
   }
 
   buttonPress() {
@@ -71,6 +74,8 @@ class App extends React.Component<Props, ReactState> {
     // This event fires when the user toggles location-services authorization
     BackgroundGeolocation.onProviderChange(this.onProviderChange)
 
+    BackgroundGeolocation.onHeartbeat(this.onHeartbeat)
+
     ////
     // 2.  Execute #ready method (required)
     //
@@ -78,7 +83,7 @@ class App extends React.Component<Props, ReactState> {
       {
         // Geolocation Config
         desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
-        distanceFilter: 10,
+        distanceFilter: 20,
         // Activity Recognition
         stopTimeout: 1,
         // Application config

@@ -1,0 +1,36 @@
+{
+  "name": "sensor-app-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rm -rf dist/*",
+    "tsc": "tsc",
+    "copy": "cp ./manifest.json ./dist && cp -r ./src/icons ./dist/icons",
+    "browserify-bg": "browserify ./dist/background.js -o ./dist/background.js",
+    "browserify": "npm run browserify-bg",
+    "start": "web-ext run --source-dir ./dist",
+    "build": "npm run clean && npm run copy && npm run tsc && npm run browserify-bg",
+    "pack": "npm run build && zip -r extension.zip ./dist",
+    "pack:webex": "web-ext build --source-dir ./dist",
+    "lint": "npm run build && addons-linter ./dist",
+    "lint:packed": "npm run pack && addons-linter extension.zip",
+    "android": "web-ext run --source-dir ./dist --target=firefox-android --android-device=b707300a --firefox-apk=org.mozilla.fennec_aurora",
+    "dev": "npm run build && npm run android",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "saji-ryu",
+  "license": "MIT",
+  "dependencies": {
+    "addons-linter": "^1.6.0",
+    "axios": "^0.18.0",
+    "browserify": "^16.2.3",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
+    "typescript": "^3.3.3",
+    "web-ext": "^2.9.3",
+    "web-ext-types": "^3.1.0",
+    "actscript-domains": "*"
+  }
+}

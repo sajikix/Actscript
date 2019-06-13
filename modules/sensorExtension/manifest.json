@@ -1,0 +1,25 @@
+{
+  "manifest_version": 2,
+  "name": "SensorExtension",
+  "description": "extension that logs sensor-data",
+  "version": "0.1.0",
+  "icons": {
+    "48": "/icons/icon.png"
+  },
+  "permissions": [
+    "notifications",
+    "storage",
+    "*://new-linda.herokuapp.com/*",
+    "webRequest"
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "applications": {
+    "gecko": {
+      "id": "rsajiki@gmail.com",
+      "strict_min_version": "66.0",
+      "update_url": "https://raw.githubusercontent.com/Hykwtakumin/ConnecTouchExtension/master/updates.json"
+    }
+  }
+}

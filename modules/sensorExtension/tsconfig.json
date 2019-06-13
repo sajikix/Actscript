@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "es6",
+    "sourceMap": true,
+    "outDir": "dist",
+    "typeRoots": ["node_modules/@types", "node_modules/web-ext-types"],
+    "jsx": "react",
+    "lib": [
+      "es2017.object",
+      "es2016.array.include",
+      "es2015",
+      "dom"
+    ]
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "__tests__/**/*.ts",
+    "__tests__/**/*.tsx"
+  ]
+}

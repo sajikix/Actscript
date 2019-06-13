@@ -35,5 +35,6 @@ export const getLocation = async (
     _domainLayer: true,
     humanState: { location: {} },
   })
+  // @ts-ignore
   return data._payload.humanState.location
 }

@@ -26,28 +26,40 @@ class TaskManager {
   tasks: { [id: string]: TaskTuple }
   lindaClient: LindaClient
   constructor() {
-    const lindaClient = new LindaClient()
+    const lindaClient = new LindaClient(
+      'http://new-linda.herokuapp.com',
+      'saji',
+    )
     this.lindaClient = lindaClient
-    this.lindaClient.connect('http://new-linda.herokuapp.com', 'saji')
     this.tasks = {}
   }
 
   async createTask() {
-    this.lindaClient.watch({ type: 'action' }, resData => {
+    this.lindaClient.watch({ type: 'action' }, async resData => {
       // TODO:ここを充実・拡張させる
       if (isValidAction(resData._payload)) {
         const { actionType, name, id, details } = resData._payload
 
         switch (actionType) {
           case 'human/wakeup':
-            const task = {
-              type: 'task',
-              name,
-              expect: { wake: 'up', name },
-              id,
-            }
-            this.tasks[id] = task
-            this.lindaClient.write(task)
+            this.lindaClient.watch(
+              {
+                name: 'saji',
+                _domainLayer: true,
+                humanState: { motion: {} },
+              },
+              (resData: any) => {
+                console.log(resData._payload)
+                // @ts-ignore
+                if (
+                  resData._payload.humanState &&
+                  resData._payload.humanState.motion &&
+                  resData._payload.humanState.motion !== 'still'
+                ) {
+                  this.lindaClient.write({ type: 'action_finished', id })
+                }
+              },
+            )
             break
           case 'human/leave':
             const leaveTask = {
@@ -58,6 +70,7 @@ class TaskManager {
             }
             this.tasks[id] = leaveTask
             this.lindaClient.write(leaveTask)
+
             break
           case 'human/goto':
             const gotoTask = {

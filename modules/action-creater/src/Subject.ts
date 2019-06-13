@@ -18,8 +18,7 @@ interface ErrorMes {
 export default class Subject {
   lindaClient: LindaClient
   constructor() {
-    this.lindaClient = new LindaClient()
-    this.lindaClient.connect('http://new-linda.herokuapp.com', 'saji')
+    this.lindaClient = new LindaClient('http://new-linda.herokuapp.com', 'saji')
   }
   action(
     actionData: ActionData,

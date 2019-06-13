@@ -37,7 +37,6 @@ class App extends React.Component<Props, ReactState> {
     BackgroundGeolocation.removeListeners()
   }
   onLocation(location: Location) {
-    console.log('[location] -', location)
     const { latitude, longitude } = location.coords
     this.state.sensing && setLocation('saji', { lat: latitude, lon: longitude })
   }
@@ -45,11 +44,7 @@ class App extends React.Component<Props, ReactState> {
     console.warn('[location] ERROR -', error)
   }
   onActivityChange(event: MotionActivityEvent) {
-    console.log('[activitychange] -', event) // eg: 'on_foot', 'still', 'in_vehicle'
     this.state.sensing && setMotion('saji', event.activity)
-  }
-  onProviderChange(provider: ProviderChangeEvent) {
-    console.log('[providerchange] -', provider.enabled, provider.status)
   }
 
   onHeartbeat(event: HeartbeatEvent) {
@@ -61,51 +56,22 @@ class App extends React.Component<Props, ReactState> {
   }
 
   componentDidMount() {
-    ////
-    // 1.  Wire up event-listeners
-    //
-
-    // This handler fires whenever bgGeo receives a location update.
     BackgroundGeolocation.onLocation(this.onLocation, this.onError)
-
-    // This event fires when a change in motion activity is detected
     BackgroundGeolocation.onActivityChange(this.onActivityChange)
-
-    // This event fires when the user toggles location-services authorization
-    BackgroundGeolocation.onProviderChange(this.onProviderChange)
-
     BackgroundGeolocation.onHeartbeat(this.onHeartbeat)
 
-    ////
-    // 2.  Execute #ready method (required)
-    //
     BackgroundGeolocation.ready(
       {
-        // Geolocation Config
         desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
         distanceFilter: 20,
-        // Activity Recognition
         stopTimeout: 1,
-        // Application config
         debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
         logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
         stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
         startOnBoot: true, // <-- Auto start tracking when device is powered-up.
-        // // HTTP / SQLite config
-        // // url: 'http://yourserver.com/locations',
-        // batchSync: false, // <-- [Default: false] Set true to sync locations to server in a single HTTP request.
-        // autoSync: true, // <-- [Default: true] Set true to sync each location to server as it arrives.
       },
       state => {
-        console.log(
-          '- BackgroundGeolocation is configured and ready: ',
-          state.enabled,
-        )
-
         if (!state.enabled) {
-          ////
-          // 3. Start tracking!
-          //
           BackgroundGeolocation.start(function() {
             console.log('- Start success')
           })
@@ -115,7 +81,6 @@ class App extends React.Component<Props, ReactState> {
   }
 
   render() {
-    //const [sensing, setSensing] = useState(false)
     return (
       <View style={styles.container}>
         <Text style={styles.title}>{'Sensor'}</Text>

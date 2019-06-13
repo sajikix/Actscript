@@ -9,7 +9,7 @@ node_modules/
 /.idea/
 /tmp/
 /bin/
-*.zip
+
 *.test
 *.swp
 dist

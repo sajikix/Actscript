@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "clean": "rm -rf dist/*",
+    "clean": "rm -rf dist",
     "tsc": "tsc",
-    "copy": "cp ./manifest.json ./dist && cp -r ./src/icons ./dist/icons",
+    "copy": "mkdir dist && mkdir ./dist/icons && cp ./manifest.json ./dist && cp -r ./src/icons ./dist/icons",
     "browserify-bg": "browserify ./dist/background.js -o ./dist/background.js",
     "browserify": "npm run browserify-bg",
     "start": "web-ext run --source-dir ./dist",

@@ -1,24 +1,50 @@
-// import { setLocation } from 'actscript-domains'
-import axios from 'axios'
+import lindaWrite from './util/lindaWrite'
 
-browser.notifications.create({
-  type: 'basic',
-  message: 'aaaa',
-  title: 'test',
-})
-
-setInterval(async () => {
-  const tuple = { test: 'test' }
-  let writeOperation = {
-    _payload: tuple,
-    _where: 'saji',
-    _type: 'write',
-  }
-  const res = await axios.post('http://new-linda.herokuapp.com', writeOperation)
+const notification = (title: string, mes: string) => {
   browser.notifications.create({
     type: 'basic',
-    message: 'aaaa',
-    title: 'test',
+    message: title,
+    title: mes,
   })
-  console.log('aaaa')
+}
+
+setInterval(async () => {
+  notification('aa', 'aa')
+  if (!navigator.geolocation) {
+    notification('error', 'この端末では位置情報が取得できます')
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    ({ coords }) => {
+      lindaWrite({
+        name: 'saji',
+        location: { lat: coords.latitude, lon: coords.longitude },
+      })
+      lindaWrite({
+        name: 'saji',
+        speed: coords.speed,
+      })
+      lindaWrite({
+        name: 'saji',
+        altitude: coords.altitude,
+      })
+    },
+    err => {
+      switch (err.code) {
+        case 1: //PERMISSION_DENIED
+          notification('error', '位置情報の利用が許可されていません')
+          break
+        case 2: //POSITION_UNAVAILABLE
+          notification('error', '現在位置が取得できませんでした')
+          break
+        case 3: //TIMEOUT
+          notification('error', 'タイムアウトになりました')
+          break
+        default:
+          notification('error', 'その他のエラー(エラーコード:' + err.code + ')')
+          break
+      }
+    },
+    { enableHighAccuracy: true },
+  )
 }, 10000)

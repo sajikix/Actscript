@@ -1,0 +1,20 @@
+{
+  "addons": {
+    "ryusei.accounts@sajiki.org": {
+      "updates": [
+        {
+          "version": "0.0.2",
+          "update_link": "https://addons.mozilla.org/firefox/downloads/file/3024927/sensorextension-0.0.2-an+fx.xpi?src=devhub"
+        },
+        {
+          "version": "0.0.3",
+          "update_link": "https://addons.mozilla.org/firefox/downloads/file/3024946/sensorextension-0.0.3-an+fx.xpi?src=devhub"
+        },
+        {
+          "version": "0.0.4",
+          "update_link": "https://addons.mozilla.org/firefox/downloads/file/3024950/sensorextension-0.0.4-an+fx.xpi?src=devhub"
+        }
+      ]
+    }
+  }
+}
